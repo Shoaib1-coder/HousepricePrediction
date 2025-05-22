@@ -1,59 +1,65 @@
 import streamlit as st
-import numpy as np
 import joblib
-import pandas as pd
-
-# Load model and scaler
-model = joblib.load("House_price_prediction.pkl")
-scaler = joblib.load("scaler.pkl")  
 
 
-price_min =  1750000      
-price_max = 13300000   
+st.title(" House Price Prediction App")
 
 
-def encode_yes_no(value):
-    return 1 if value.lower() == 'yes' else 0
-
-st.title("🏠 House Price Prediction App")
-
-
-area = st.slider("Area (sq. ft)", 200, 1000, 500)
-bathrooms = st.number_input("Number of Bathrooms", 1, 10, 1)
-stories = st.number_input("Number of Stories", 1, 10, 1)
-hotwaterheating = st.selectbox("Hot Water Heating", ["Yes", "No"])
-airconditioning = st.selectbox("Air Conditioning", ["Yes", "No"])
-basement = st.selectbox("Basement", ["Yes", "No"])
-prefarea = st.selectbox("Preferred Area", ["Yes", "No"])
-parking = st.slider("Parking Spaces", 0, 10, 1)
+area = st.number_input("Area (in square feet)", min_value=1650, max_value=16200, value=7420)
+bathrooms = st.slider("Number of Bathrooms", 1, 4, 2)
+stories = st.slider("Number of Stories", 1, 4, 3)
+hotwaterheating = st.selectbox("Hot Water Heating", ['yes', 'no'])
+parking = st.slider("Number of Parking Spots", 0, 3, 2)
+airconditioning = st.selectbox("Air Conditioning", ['yes', 'no'])
+basement = st.selectbox("Basement", ['yes', 'no'])
+prefarea = st.selectbox("Preferred Area", ['yes', 'no'])
 
 
-hotwaterheating = encode_yes_no(hotwaterheating)
-airconditioning = encode_yes_no(airconditioning)
-basement = encode_yes_no(basement)
-prefarea = encode_yes_no(prefarea)
+min_max = {
+    'area': (1650, 16200),
+    'bathrooms': (1, 4),
+    'stories': (1, 4),
+    'parking': (0, 3)
+}
 
 
-input_df = pd.DataFrame([[
-    area, bathrooms, stories, hotwaterheating, parking,
-    airconditioning, basement, prefarea
-]], columns=[
-    "area", "bathrooms", "stories", "hotwaterheating", "parking",
-    "airconditioning", "basement", "prefarea"
-])
+def normalize(value, min_val, max_val):
+    return (value - min_val) / (max_val - min_val)
 
 
-scaled_input = scaler.transform(input_df)
+def yes_no_to_binary(val):
+    return 1.0 if val.lower() == 'yes' else 0.0
 
 
 if st.button("Predict Price"):
-    prediction = model.predict(scaled_input)[0]
+   
+    area_norm = normalize(area, *min_max['area'])
+    bathrooms_norm = normalize(bathrooms, *min_max['bathrooms'])
+    stories_norm = normalize(stories, *min_max['stories'])
+    parking_norm = normalize(parking, *min_max['parking'])
+
+    hotwaterheating_bin = yes_no_to_binary(hotwaterheating)
+    airconditioning_bin = yes_no_to_binary(airconditioning)
+    basement_bin = yes_no_to_binary(basement)
+    prefarea_bin = yes_no_to_binary(prefarea)
 
 
-    actual_price = prediction * (price_max - price_min) + price_min
+    loaded_model = joblib.load("House_price_prediction.pkl")
+
+    
+    sample = [[
+        area_norm, bathrooms_norm, stories_norm,
+        hotwaterheating_bin, parking_norm, airconditioning_bin,
+        basement_bin, prefarea_bin
+    ]]
+
+    
+    predicted_price = loaded_model.predict(sample)[0]
 
    
-    st.info(f"💰 Estimated Price: ₨ {actual_price:,.2f}")
+    min_price = 1750000
+    max_price = 13300000
+    actual_price = predicted_price * (max_price - min_price) + min_price
 
-
-
+   
+    st.success(f" Predicted House Price: {actual_price:,.2f} RS")
