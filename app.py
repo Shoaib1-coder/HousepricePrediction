@@ -44,7 +44,7 @@ if st.button("Predict Price"):
     prefarea_bin = yes_no_to_binary(prefarea)
 
 
-    loaded_model = joblib.load("House_price_prediction.pkl")
+    loaded_model = joblib.load("House1_price_prediction.pkl")
 
     
     sample = [[
