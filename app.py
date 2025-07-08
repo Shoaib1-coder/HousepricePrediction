@@ -2,7 +2,7 @@ import streamlit as st
 import joblib
 
 
-st.title(" House Price Prediction App")
+st.title(" House Price Prediction App1")
 
 
 area = st.number_input("Area (in square feet)", min_value=1650, max_value=16200, value=7420)
