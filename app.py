@@ -6,10 +6,10 @@ st.title(" House Price Prediction App")
 
 
 area = st.number_input("Area (in square feet)", min_value=1650, max_value=16200, value=7420)
-bathrooms = st.slider("Number of Bathrooms", 1, 4, 2)
-stories = st.slider("Number of Stories", 1, 4, 3)
+bathrooms = st.slider("Number of Bathrooms", 1, 10, 2)
+stories = st.slider("Number of Stories", 1, 10, 3)
 hotwaterheating = st.selectbox("Hot Water Heating", ['yes', 'no'])
-parking = st.slider("Number of Parking Spots", 0, 3, 2)
+parking = st.slider("Number of Parking Spots", 0, 5, 2)
 airconditioning = st.selectbox("Air Conditioning", ['yes', 'no'])
 basement = st.selectbox("Basement", ['yes', 'no'])
 prefarea = st.selectbox("Preferred Area", ['yes', 'no'])
