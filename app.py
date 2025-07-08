@@ -2,10 +2,10 @@ import streamlit as st
 import joblib
 
 
-st.title(" House Price Prediction App1")
+st.title(" House Price Prediction App")
 
 
-area = st.number_input("Area (in square feet)", min_value=1650, max_value=16200, value=7420)
+area = st.number_input("Area (in square feet)", min_value=100, max_value=10000, value=100)
 bathrooms = st.slider("Number of Bathrooms", 1, 15, 2)
 stories = st.slider("Number of Stories", 1, 10, 3)
 hotwaterheating = st.selectbox("Hot Water Heating", ['yes', 'no'])
