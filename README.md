@@ -42,8 +42,8 @@ This is a Streamlit web application that predicts house prices based on user inp
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/Shoaib1-coder/HousepricePrediction.git
+cd HousepricePrediction
 ```
 
 ### 2. Create virtual environment (optional but recommended)
